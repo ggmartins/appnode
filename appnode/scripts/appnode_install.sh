@@ -7,6 +7,7 @@ else
 fi
 
 echo "Installing/Upgrading puppet ..."
+apt-get update
 apt-get install puppet
 if [ -f /etc/puppet/puppet.conf ];then
   mv /etc/puppet/puppet.conf /etc/puppet/puppet.conf.original
@@ -20,4 +21,4 @@ if [ ! -f /etc/init.d/appnode_init ];then
   ln -s /opt/appnode/etc/init.d/appnode_init /etc/init.d/appnode_init
 fi
 
-
+/etc/init.d/puppet start
