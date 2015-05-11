@@ -1,0 +1,87 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          appnode_management
+# Required-Start:    hostname $local_fs $remote_fs
+# Required-Stop:     $remote_fs
+# Should-Start:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start the appnode management scripts.
+# Description:       Start the appnode management scripts.
+### END INIT INFO
+
+START=98
+
+CRONDIR=/etc/cron.d
+CRONFILE=/etc/cron.d/appnode_management
+BINFILE=/opt/appnode/bin/appnode_mgmt
+LOGDIR=/opt/appnode/log/
+
+start() {
+  mkdir -p $LOGDIR
+  echo "appnode: checking $CRONDIR dir ..."
+  if [ -d $CRONDIR ];then
+    if [ -x /etc/init.d/cron ]; then
+      /etc/init.d/cron start
+    else
+      echo "appnode error: unable to run /etc/init.d/cron start"
+      exit 3;
+    fi
+  else
+    echo "appnode error: $CRONDIR not present"
+    exit 3;
+  fi
+  if [ -x $BINFILE ]; then
+    echo "*/5 * * * * root $BINFILE >$LOGDIR/management 2>&1" >$CRONFILE
+    chmod +x $CRONFILE
+    echo "appnode: Starting AppNode Management OK"
+  else
+    echo "appnode error: $BINFILE not executable"
+  fi
+  echo "Done."
+}
+
+stop() {
+    [ -f $CRONFILE ] && {
+        rm -f $CRONFILE
+    }
+}
+
+restart() {
+    stop
+    start
+}
+
+status() {
+    if [ -f $CRONFILE ]; then
+      echo "appnode: AppNode Management is running."
+    else
+      echo "appnode: AppNode Management is stopped."
+    fi
+}
+
+
+case "$1" in
+  start)
+        start
+        ;;
+  reload|force-reload)
+        echo "Error: argument '$1' not supported" >&2
+	restart
+        exit 3
+        ;;
+  restart)
+	restart
+	;;
+  stop)
+        stop
+        ;;
+  status)
+        status
+        exit $?
+        ;;
+  *)   
+        echo "Usage: appnode_management [start|stop|status|restart]" >&2
+        exit 3
+        ;;
+esac

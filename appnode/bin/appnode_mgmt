@@ -1,0 +1,125 @@
+#!/bin/bash
+
+
+LOADDIR=/opt/appnode/images/load
+RUNNDIR=/opt/appnode/images/run
+LOCK=/tmp/appnode_lock
+
+acquire_lock()
+{
+  if (set -o noclobber; echo "$$" > $LOCK) 2> /dev/null;then  
+    trap 'rm -f "$LOCK"; exit $?' INT TERM EXIT
+    return 0
+  else
+    return 1
+  fi
+}
+
+release_lock()
+{
+  rm -f $LOCK
+  trap - INT TERM EXIT
+}
+
+#requires docker, md5sum
+
+if [ -z $(which md5sum) ];then
+  echo "appnode mgmt error: md5sum not found."
+  exit
+fi
+
+if [ ! -x /etc/init.d/docker ];then
+  echo "appnode mgmt error: /etc/init.d/docker not executable."
+  exit
+fi
+
+if /etc/init.d/docker status | grep "not running";then
+  /etc/init.d/docker start
+  sleep 2
+fi
+
+if ! acquire_lock ; then
+  exit
+fi
+
+if [ ! -d $LOADDIR ]; then
+  echo "appnode mgmt error: Dir $LOADDIR does not exist."
+  exit 1;
+fi
+
+imgs=$(docker images -q -f dangling=true)
+if [ ! -z $imgs ]; then
+  docker rmi $(docker images -q -f dangling=true)
+fi
+
+for i in $(ls $LOADDIR);
+do
+  if [ -f $RUNNDIR/$i ]; then
+    md5=$(md5sum $LOADDIR/$i | awk '{print $1}')
+    md5_comp=$(cat $RUNNDIR/$i)
+    if [ "$md5_comp" == "$md5" ];then
+      echo "appnode mgmt: image checked OK."
+    else
+      #check to see if the image is still being transferred 
+      sleep 1
+      md5_comp2=$(md5sum $LOADDIR/$i | awk '{print $1}')      
+      if [ "$md5_comp2" != "$md5" ];then
+        echo "appnode mgmt: the image $i is being transferred. Trying again later..."
+        release_lock
+        exit
+      fi
+      echo "appnode mgmt: loading new image for $LOADDIR/$i"
+      image=$(echo $i | sed "s/\-/\//g" | sed "s/.tar//g")
+      container=$(docker ps -a | grep $image | awk '{ print $1 }')
+      if [ ! -z $container ];then
+        docker stop $container
+        docker rm $container
+        docker rmi $image
+      fi
+      docker load < $LOADDIR/$i
+      docker run --rm $image "/opt/init.sh"
+      docker run -d $image "/opt/run.sh"
+      if [ ! -z "$(docker ps | grep $image)" ];then
+        echo "RUNNING"
+        echo $md5 > $RUNNDIR/$i
+      else
+        echo "NOT RUNNING"
+      fi
+    fi
+  else
+    md5=$(md5sum $LOADDIR/$i | awk '{print $1}')
+    echo "appnode mgmt: loading new image (writing hash in $RUNNDIR/$i)"
+    image=$(echo $i | sed "s/\-/\//g" | sed "s/.tar//g")
+    container=$(docker ps -a | grep $image | awk '{ print $1 }')
+    if [ ! -z $container ];then
+      docker stop $container
+      docker rm $container
+      docker rmi $image
+    fi
+    docker load < $LOADDIR/$i
+    docker run --rm $image "/opt/init.sh"
+    docker run -d $image "/opt/run.sh"
+    if [ ! -z "$(docker ps | grep $image)" ];then
+      echo "RUNNING"
+      echo $md5 > $RUNNDIR/$i
+    else
+      echo "NOT RUNNING"
+    fi
+  fi
+done
+
+release_lock
+#else
+#  echo "NOT AQUIRED"
+#fi
+
+#check name and timezone
+echo "appnode mgmt: OK"
+#echo appnode_managemen OKt
+#create /opt/appnode/images
+#chk docker init.d
+#chk puppet init.d
+#for each file in /opt/appnode/images
+#  load into docker
+
+
