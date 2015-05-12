@@ -88,6 +88,14 @@ do
     fi
   else
     md5=$(md5sum $LOADDIR/$i | awk '{print $1}')
+    #check to see if the image is still being transferred 
+    sleep 1
+    md5_comp2=$(md5sum $LOADDIR/$i | awk '{print $1}')
+    if [ "$md5_comp2" != "$md5" ];then
+      echo "appnode mgmt: the image $i is being transferred. Trying again later..."
+      release_lock
+      exit
+    fi
     echo "appnode mgmt: loading new image (writing hash in $RUNNDIR/$i)"
     image=$(echo $i | sed "s/\-/\//g" | sed "s/.tar//g")
     container=$(docker ps -a | grep $image | awk '{ print $1 }')
