@@ -8,7 +8,14 @@ fi
 
 echo "Installing/Upgrading puppet ..."
 apt-get update
+
+cd /tmp 
+wget https://apt.puppetlabs.com/puppetlabs-release-wheezy.deb
+dpkg -i puppetlabs-release-wheezy.deb
+rm puppetlabs-release-wheezy.deb
+cd -
 apt-get -yq install puppet
+
 if [ -f /etc/puppet/puppet.conf ];then
   mv /etc/puppet/puppet.conf /etc/puppet/puppet.conf.original
   ln -s /opt/appnode/etc/puppet/puppet.conf /etc/puppet/puppet.conf
