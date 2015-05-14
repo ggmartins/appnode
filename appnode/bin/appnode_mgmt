@@ -49,11 +49,20 @@ fi
 
 imgs=$(docker images -q -f dangling=true)
 if [ ! -z $imgs ]; then
-  docker rmi $(docker images -q -f dangling=true)
+  echo "appnode mgmt: removing $imgs ..."
+  container=$(docker ps -a | grep $imgs | awk '{ print $1 }')
+  docker stop $container
+  docker rm $container
+  docker rmi $imgs
 fi
 
 for i in $(ls $LOADDIR);
 do
+  if [[ ! $i =~ \.tar$ ]];
+  then
+    echo "appnode: skipping $i ..."
+    continue
+  fi
   image=$(echo $i | sed "s/\-/\//g" | sed "s/.tar//g")
   container=$(docker ps -a | grep $image | awk '{ print $1 }')
   if [ -f $RUNNDIR/$i ]; then
@@ -65,20 +74,15 @@ do
         echo "appnode mgmt: attempting to run image."
         docker run -d $image "/opt/run.sh"
       fi
+      continue
+    else
+       echo "appnode mgmt: new file detected." 
     fi
-    continue
   fi
   md5=$(md5sum $LOADDIR/$i | awk '{print $1}')
   #check to see if the image is still being transferred 
-  sleep 1
-  md5_comp2=$(md5sum $LOADDIR/$i | awk '{print $1}')
-  if [ "$md5_comp2" != "$md5" ];then
-    echo "appnode mgmt: the image $i is being transferred. Trying again later..."
-    release_lock
-    exit
-  fi
   echo "appnode mgmt: loading new image (writing hash in $RUNNDIR/$i)"
-  if [ ! -z $container ];then
+  if [ ! -z "$container" ];then
     docker stop $container
     docker rm $container
     docker rmi $image
@@ -95,17 +99,6 @@ do
 done
 
 release_lock
-#else
-#  echo "NOT AQUIRED"
-#fi
 
-#check name and timezone
 echo "appnode mgmt: OK"
-#echo appnode_managemen OKt
-#create /opt/appnode/images
-#chk docker init.d
-#chk puppet init.d
-#for each file in /opt/appnode/images
-#  load into docker
-
 
