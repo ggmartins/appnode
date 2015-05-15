@@ -7,12 +7,13 @@ else
 fi
 
 echo "Installing/Upgrading puppet ..."
-apt-get update
+
 
 cd /tmp 
 wget https://apt.puppetlabs.com/puppetlabs-release-wheezy.deb
 dpkg -i puppetlabs-release-wheezy.deb
 rm puppetlabs-release-wheezy.deb
+apt-get update
 cd -
 apt-get -yq install puppet
 
