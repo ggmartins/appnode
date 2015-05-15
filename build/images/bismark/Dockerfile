@@ -9,6 +9,5 @@ RUN wget http://downloads.projectbismark.net/debian/bismarkdeb-install-armhf.sh 
 RUN apt-get install -f -y
 RUN rm -f /opt/*.deb
 RUN apt-get clean
-ADD init.sh /opt/init.sh
 ADD run.sh /opt/run.sh
 

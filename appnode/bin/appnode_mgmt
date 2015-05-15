@@ -88,7 +88,6 @@ do
     docker rmi $image
   fi
   docker load < $LOADDIR/$i
-  docker run --rm $image "/opt/init.sh"
   docker run -d $image "/opt/run.sh"
   if [ ! -z "$(docker ps | grep $image)" ];then
     echo "RUNNING"
