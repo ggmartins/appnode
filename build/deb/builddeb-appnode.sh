@@ -87,16 +87,17 @@ override_dh_auto_install:
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/images/load
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/images/run
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/images/unload
-	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc
+	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc/puppet
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/log
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/scripts
 
 	cp $$(pwd)/appnode/bin/* $$(pwd)/debian/appnode/opt/appnode/bin/
 	cp $$(pwd)/appnode/etc/init.d/appnode_init $$(pwd)/debian/appnode/etc/init.d/
+	cp $$(pwd)/appnode/etc/puppet/* $$(pwd)/debian/appnode/opt/appnode/etc/puppet/
 	cp $$(pwd)/appnode/scripts/* $$(pwd)/debian/appnode/opt/appnode/scripts/
+
 EOF
 
-echo /etc/init.d/appnode_init > debian/conffiles
 
 chmod +x $TARGETDIR/debian/rules
 
