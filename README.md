@@ -7,7 +7,7 @@
  * Your Project Here;
  
 <b>Supported hardware/OS:</b>
- * Raspberry PI B+ / <a href="http://appnode.space/downloads/>Raspbian HypriotOS</a>
+ * Raspberry PI B+ / <a href="http://appnode.space/downloads/">Raspbian HypriotOS</a><br>
  
 
 
