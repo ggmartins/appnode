@@ -5,9 +5,12 @@ case $response in
     [yY][eE][sS]|[yY]) 
 	ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 	echo "Etc/UTC" > /etc/timezone
-        echo $new_hostname > /etc/hostname
+	echo $new_hostname > /etc/hostname
+	if [ -f /boot/occidentalis.txt ];then
+		sed -i.bak "s/hostname=black-pearl/hostname=$new_hostname/g" /boot/occidentalis.txt
+	fi
 	/sbin/reboot
-        echo Done.
+	echo Done.
 	;;
     *)
         echo "Bye."

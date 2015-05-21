@@ -6,3 +6,6 @@ START=yes
 # Startup options
 DAEMON_OPTS=""
 
+PUPPET_LOG=/var/log/puppet/agent.log
+PUPPET_EXTRA_OPTS="--verbose"
+
