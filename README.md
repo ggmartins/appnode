@@ -1,6 +1,5 @@
 # appnode
-<i><b>A project for containerize multiple research platforms using docker images.</b></i>
-
+<img src="https://raw.githubusercontent.com/ggmartins/appnode/master/docs/images/appnode_image1.png" /><br>
 <b>Current available docker containers:</b>
  * BISmark (Broadband Internet Service benchmark);
  * Seattle (Open Peer-to-Peer Computing);
