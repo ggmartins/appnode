@@ -43,7 +43,7 @@ Build-Depends: debhelper (>= 9)
 
 Package: appnode
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, puppet, docker-hypriot
+Depends: ${shlibs:Depends}, ${misc:Depends}, docker-hypriot
 Description: This is the Control package for AppNode Space
  Distributed Container Computing Space
 
@@ -88,6 +88,7 @@ override_dh_auto_install:
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/images/run
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/images/unload
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc/puppet
+	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc/salt
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc/default
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/log
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/scripts

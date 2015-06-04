@@ -11,6 +11,7 @@
 
 
 <b>Steps to build an appnode application container:</b><br>
+ Choose Configuration Management System Client ( <a href="http://docs.saltstack.com/en/latest/topics/installation/debian.html">SaltStack</a> OR <a href="https://docs.puppetlabs.com/guides/install_puppet/install_debian_ubuntu.html">Puppet</a> )<br>
  $git clone https://github.com/ggmartins/appnode.git<br>
  $cd appnode/build/images<br>
  $./build.sh<br>
