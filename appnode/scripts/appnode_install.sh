@@ -1,21 +1,18 @@
 #!/bin/sh
 
+if [ “$(id -u)” != “0” ]; then
+  echo "appnode install error: this script must be run as root." 2>&1
+  exit 1
+fi
+
+
 if [ -f /etc/init.d/docker ]; then
   echo "appnode install: Docker is installed."
 else
   echo "appnode install: Docker is NOT present. Please install Docker 1.5 or greater."
 fi
 
-echo "Installing/Upgrading puppet ..."
-
-
-#cd /tmp 
-#wget https://apt.puppetlabs.com/puppetlabs-release-wheezy.deb
-#dpkg -i puppetlabs-release-wheezy.deb
-#rm puppetlabs-release-wheezy.deb
-#apt-get update
-#cd -
-#apt-get -yq install puppet
+echo "Installing support for CMS..."
 
 if [ ! -f /etc/init.d/appnode_init ];then
   ln -s /opt/appnode/etc/init.d/appnode_init /etc/init.d/appnode_init
