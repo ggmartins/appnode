@@ -2,6 +2,7 @@
 
 
 LOADDIR=/opt/appnode/images/load
+UNLOADDIR=/opt/appnode/images/unload
 RUNNDIR=/opt/appnode/images/run
 LOCK=/tmp/appnode_lock
 
@@ -96,6 +97,27 @@ do
     echo "NOT RUNNING"
   fi
 done
+
+for i in $(ls $UNLOADDIR);
+do
+  if [[ ! $i =~ \.tar$ ]];
+  then
+    echo "appnode: skipping $i ..."
+    continue
+  fi
+  image=$(echo $i | sed "s/\-/\//g" | sed "s/.tar//g")
+  container=$(docker ps -a | grep $image | awk '{ print $1 }')
+  echo "appnode mgmt: unloading image (using name in $RUNNDIR/$i)"
+  if [ ! -z "$container" ];then
+    rm -f $LOADDIR/$i
+    rm -f $RUNNDIR/$i
+    docker stop $container
+    docker rm $container
+    docker rmi $image
+  fi
+done
+
+
 
 release_lock
 
