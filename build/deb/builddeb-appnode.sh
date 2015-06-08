@@ -64,7 +64,7 @@ EOF
 cat << "EOF" | tee $TARGETDIR/debian/postrm > /dev/null
 #!/bin/bash
 set -e
-if [ -x /etc/init.d/appnode_init]; then
+if [ -x /etc/init.d/appnode_init ]; then
   update-rc.d -f appnode_init remove
 fi
 rm -f /etc/cron.d/appnode_management
