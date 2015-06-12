@@ -5,9 +5,33 @@ if [ “$(id -u)” != “0” ]; then
   exit 1
 fi
 
+echo "Installing Security Updates..."
+if [ -f /etc/apt/sources.list ] && [ ! -h /etc/apt/sources.list ];then
+  mv /etc/apt/sources.list /etc/apt/sources.list.original
+  ln -s /opt/appnode/etc/apt/sources.list /etc/apt/sources.list
+else
+  echo "appnode install: /etc/apt/sources.list untouched."
+fi
+
+if [ -f /etc/apt/preferences ] && [ ! -h /etc/apt/preferences ];then
+  mv /etc/apt/preferences /etc/apt/preferences.original
+  ln -s /opt/appnode/etc/apt/preferences /etc/apt/preferences
+else
+  echo "appnode install: /etc/apt/preferences untouched."
+fi
+
+apt-get update
+
+apt-get -t jessie install -qy openssl libssl1.0.0 openssh-client openssh-server ssh
+apt-get -t jessie install -qy apt-utils
+apt-get -t jessie install -qy linux-libc-dev
+apt-get -t jessie install -qy multiarch-support
+apt-get -t jessie install -qy apt
+apt-get -t jessie install -qy libsqlite3-0
+
+
 echo "Installing CMS SaltStack..."
 echo "deb http://debian.saltstack.com/debian wheezy-saltstack main" > /etc/apt/sources.list.d/salt.list
-apt-get update
 apt-get install -qy salt-minion
 
 if [ -f /etc/init.d/docker ]; then

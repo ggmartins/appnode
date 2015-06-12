@@ -89,6 +89,7 @@ override_dh_auto_install:
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/images/unload
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc/puppet
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc/salt
+	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc/apt
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/etc/default
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/log
 	mkdir -p $$(pwd)/debian/appnode/opt/appnode/scripts
@@ -97,6 +98,7 @@ override_dh_auto_install:
 	cp $$(pwd)/appnode/etc/init.d/appnode_init $$(pwd)/debian/appnode/etc/init.d/
 	cp $$(pwd)/appnode/etc/puppet/* $$(pwd)/debian/appnode/opt/appnode/etc/puppet/
 	cp $$(pwd)/appnode/etc/salt/* $$(pwd)/debian/appnode/opt/appnode/etc/salt/
+	cp $$(pwd)/appnode/etc/apt/* $$(pwd)/debian/appnode/opt/appnode/etc/apt/
 	cp $$(pwd)/appnode/etc/default/puppet $$(pwd)/debian/appnode/opt/appnode/etc/default/
 	cp $$(pwd)/appnode/scripts/* $$(pwd)/debian/appnode/opt/appnode/scripts/
 
