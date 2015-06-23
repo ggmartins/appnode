@@ -20,15 +20,17 @@ else
   echo "appnode install: /etc/apt/preferences untouched."
 fi
 
-apt-get update
+apt-get update -qy
 
-apt-get -t jessie install -qy openssl libssl1.0.0 openssh-client openssh-server ssh
-apt-get -t jessie install -qy apt-utils
-apt-get -t jessie install -qy linux-libc-dev
-apt-get -t jessie install -qy multiarch-support
-apt-get -t jessie install -qy apt
-apt-get -t jessie install -qy libsqlite3-0
+apt-get install -qy openssl libssl1.0.0 openssh-client openssh-server ssh
+apt-get install -qy apt-utils
+apt-get install -qy linux-libc-dev
+apt-get install -qy multiarch-support
+apt-get install -qy apt
+apt-get install -qy libsqlite3-0
 
+apt-get upgrade -qy
+apt-get dist-upgrade -qy
 
 echo "Installing CMS SaltStack..."
 echo "deb http://debian.saltstack.com/debian wheezy-saltstack main" > /etc/apt/sources.list.d/salt.list

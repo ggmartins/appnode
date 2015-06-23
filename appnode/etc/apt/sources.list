@@ -1,4 +1,3 @@
-deb http://mirrordirector.raspbian.org/raspbian/ wheezy main contrib non-free rpi
 deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi
 deb http://archive.raspbian.org/raspbian jessie main contrib non-free rpi
 
