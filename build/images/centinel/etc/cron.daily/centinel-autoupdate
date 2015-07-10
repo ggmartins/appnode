@@ -1,0 +1,3 @@
+#!/bin/bash
+# autoupdater for centinel
+sudo pip install --upgrade centinel

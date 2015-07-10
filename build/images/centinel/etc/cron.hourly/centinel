@@ -1,0 +1,5 @@
+#!/bin/bash
+# cron job for centinel
+/usr/local/bin/centinel --sync
+/usr/local/bin/centinel
+/usr/local/bin/centinel --sync
