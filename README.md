@@ -1,8 +1,9 @@
 # <a href="http://appnode.space">appnode</a>
 <img src="https://raw.githubusercontent.com/ggmartins/appnode/master/docs/images/appnode_image1.png" /><br>
 <b>Current available docker containers:</b>
- * BISmark (Broadband Internet Service benchmark);
- * Seattle (Open Peer-to-Peer Computing);
+ * <a href="http://projectbismark.net"> BISmark (Broadband Internet Service benchmark);</a>
+ * <a href="https://seattle.poly.edu/html/">Seattle (Open Peer-to-Peer Computing);</a>
+ * <a href="https://iclab.org/">ICLab Centinel</a>
  * Your Project Here;
  
 <b>Supported hardware/OS:</b>
