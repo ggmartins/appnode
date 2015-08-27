@@ -49,7 +49,7 @@ if [ ! -d $LOADDIR ]; then
 fi
 
 imgs=$(docker images -q -f dangling=true)
-if [ ! -z $imgs ]; then
+if [ ! -z "$imgs" ]; then
   echo "appnode mgmt: removing $imgs ..."
   container=$(docker ps -a | grep $imgs | awk '{ print $1 }')
   docker stop $container
